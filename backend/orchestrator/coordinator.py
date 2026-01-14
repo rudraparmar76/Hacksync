@@ -2,6 +2,8 @@
 from logs.traces import TraceLogger
 from preprocessing.loader import extract_text
 from preprocessing.summarizer import summarize_document
+from backend.preprocessing.normalizer import normalize_input
+
 
 from agents.factor_agent import run_factor_agent
 from agents.support_agent import run_support_agent
@@ -14,7 +16,14 @@ def run_aether_pipeline(file_bytes: bytes,filename:str):
 
     raw_text = raw_text = extract_text(file_bytes, filename)
 
-    processed_doc = summarize_document(raw_text)
+
+    normalized = normalize_input(
+        text=raw_text,
+        csv_df=optional_csv_df,
+        chart_notes=optional_chart_notes
+    )
+
+    processed_doc = summarize_document(normalized)
 
     factors = run_factor_agent(processed_doc)
     trace.log_step(

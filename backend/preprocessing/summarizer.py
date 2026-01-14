@@ -1,53 +1,57 @@
 import os
+import json
+import re
+from typing import Dict, List
+
 from dotenv import load_dotenv
 import google.generativeai as genai
-from typing import Dict, List
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-MODEL_NAME = "gemini-2.5-flash"
+MODEL_NAME = "models/gemini-2.5-flash"
 
-def summarize_document(text: str, max_chunk_size: int = 6000) -> Dict:
-    """
-    Summarizes a potentially large document using Gemini.
-    Uses chunking + hierarchical summarization.
-    """
-
-    if not text or len(text.strip()) == 0:
-        return {
-            "summary": "",
-            "sections": []
+SUMMARY_SCHEMA = {
+    "summary": "string",
+    "sections": [
+        {
+            "title": "string",
+            "summary": "string"
         }
+    ]
+}
+
+
+# ------------------ PUBLIC API ------------------
+
+def summarize_document(normalized_input: Dict, max_chunk_size: int = 6000) -> Dict:
+    """
+    Summarizes multimodal input (text + structured insights)
+    into a strict JSON analytical summary.
+    """
+
+    text = normalized_input.get("text", "").strip()
+    structured_insights = normalized_input.get("structured_insights", [])
+
+    if not text and not structured_insights:
+        return {"summary": "", "sections": []}
 
     chunks = _chunk_text(text, max_chunk_size)
 
     chunk_summaries = []
     for idx, chunk in enumerate(chunks):
-        summary = _summarize_chunk(chunk, idx + 1)
-        chunk_summaries.append(summary)
+        chunk_summaries.append(_summarize_chunk(chunk, idx + 1))
 
-    final_summary = _merge_summaries(chunk_summaries)
+    return _merge_summaries(chunk_summaries, structured_insights)
 
-    return final_summary
 
-# ----------------------- helpers -----------------------
+# ------------------ HELPERS ------------------
 
 def _chunk_text(text: str, max_size: int) -> List[str]:
-    """Split text into safe-size chunks"""
-    chunks = []
-    start = 0
-
-    while start < len(text):
-        end = start + max_size
-        chunks.append(text[start:end])
-        start = end
-
-    return chunks
+    return [text[i:i + max_size] for i in range(0, len(text), max_size)]
 
 
 def _summarize_chunk(chunk: str, index: int) -> str:
-    """Summarize a single chunk"""
     model = genai.GenerativeModel(MODEL_NAME)
 
     prompt = f"""
@@ -63,46 +67,54 @@ Chunk {index}:
 """
 
     response = model.generate_content(prompt)
-
     return response.text.strip()
 
 
-def _merge_summaries(chunk_summaries: List[str]) -> Dict:
-    """Merge chunk summaries into final structured output"""
+def _merge_summaries(chunk_summaries: List[str], structured_insights: List[str]) -> Dict:
     model = genai.GenerativeModel(MODEL_NAME)
 
-    joined = "\n\n".join(chunk_summaries)
+    joined_text = "\n\n".join(chunk_summaries)
 
     prompt = f"""
-You are synthesizing multiple summaries into a final structured overview.
+You are a deterministic summarization engine in a multimodal analysis system.
 
-Create:
-1. A concise overall summary (max 250 words)
-2. A list of key sections with short summaries
+INPUTS:
+- Natural language summaries
+- Structured data insights (tables, metrics, charts)
 
-Return STRICT JSON ONLY in the following format:
+TASK:
+- Combine all inputs into a coherent analytical summary
+- Treat structured insights as factual signals
+- Do NOT invent data
+- Do NOT speculate beyond provided inputs
 
-{{
-  "summary": "overall summary text",
-  "sections": [
-    {{
-      "title": "Section title",
-      "summary": "Section summary"
-    }}
-  ]
-}}
+CRITICAL OUTPUT RULES:
+- Output ONLY valid JSON
+- No markdown
+- No explanations
+- No text outside JSON
+- Follow the schema EXACTLY
 
-Text:
-{joined}
+SCHEMA:
+{json.dumps(SUMMARY_SCHEMA, indent=2)}
+
+TEXT SUMMARIES:
+{joined_text}
+
+STRUCTURED INSIGHTS:
+{json.dumps(structured_insights, indent=2)}
 """
 
     response = model.generate_content(prompt)
+    return _safe_json_parse(response.text)
 
-    # IMPORTANT: Gemini sometimes returns text before JSON
-    # Simple safe extraction
-    text = response.text.strip()
-    json_start = text.find("{")
-    json_end = text.rfind("}") + 1
 
-    return eval(text[json_start:json_end])
+def _safe_json_parse(text: str) -> Dict:
+    match = re.search(r"\{.*\}", text, re.DOTALL)
+    if not match:
+        return {"summary": "", "sections": []}
 
+    try:
+        return json.loads(match.group())
+    except json.JSONDecodeError:
+        return {"summary": "", "sections": []}
