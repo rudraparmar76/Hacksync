@@ -1,13 +1,15 @@
 def support_prompt(factor):
     return f"""
-    Analyze the following factor from a growth perspective:
-    FACTOR: {factor.name}
-    DESCRIPTION: {factor.description}
-    
-    TASK:
-    1. Identify the primary value proposition.
-    2. Provide a logical explanation of how this factor leads to a successful outcome.
-    3. Use data-driven reasoning based on the provided description.
-    
-    STRICT: No marketing jargon. Focus on technical and logical benefits.
-    """
+ROLE: Proponent
+
+CLAIM:
+"{factor.description}"
+
+RULES:
+- Make ONE clear argument only.
+- State ONE concrete benefit.
+- Do NOT mention risks or limitations.
+- Max 4 sentences. If you exceed this, your response is invalid.
+
+Be direct and precise.
+"""

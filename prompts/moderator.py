@@ -1,23 +1,29 @@
 def moderator_prompt(factor, transcript):
     return f"""
-    Evaluate the debate below using these three criteria:
-    1. Logical Consistency: Is the claim supported by the description?
-    2. Feasibility: Can the risks mentioned be mitigated?
-    3. Impact: Is the benefit significant enough to justify the effort?
-    
-    DEBATE: {transcript}
-    
-    SCORING GUIDE:
-    1-3: Fundamentally flawed or too risky.
-    4-6: Good idea, but has major implementation hurdles.
-    7-9: Strong, actionable, and logical.
-    10: Perfect (rare).
-    
-    OUTPUT JSON ONLY:
-    {{
-      "status": "ACCEPTED | REJECTED",
-      "verdict": "Detailed logical conclusion.",
-      "score": 1-10,
-      "winning_argument": "Which specific logical point won the debate?"
-    }}
-    """
+You are a strict, neutral debate judge.
+
+FACTOR:
+{factor.name}
+
+DEBATE TRANSCRIPT:
+{transcript}
+
+EVALUATION PRIORITY (most important first):
+1. Direct responsiveness between agents
+2. Logical consistency
+3. Feasibility
+4. Impact vs effort
+
+PENALIZE HEAVILY IF:
+- New evidence appears in rebuttal
+- An agent ignores the opponent’s point
+- Arguments are overly broad or unfocused
+
+OUTPUT JSON ONLY (no markdown, no commentary):
+{{
+  "status": "ACCEPTED or REJECTED",
+  "verdict": "Short, disciplined reasoning (2–3 sentences max).",
+  "score": 1-10,
+  "winning_argument": "Exact sentence or idea that decided the debate"
+}}
+"""

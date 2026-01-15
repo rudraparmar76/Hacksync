@@ -1,12 +1,12 @@
 import os
+import time
 from groq import Groq
+from dotenv import load_dotenv
 
-# 🔑 Use the new production model ID
-# "llama-3.3-70b-versatile" is the current state-of-the-art on Groq
+load_dotenv()
 MODEL_ID = "openai/gpt-oss-120b"
-GROQ_API_KEY = "api_key" # REMEMBER: Create a new key in Groq console!
-
-client = Groq(api_key=GROQ_API_KEY)
+api_key = os.getenv("GROQ_API_KEY")
+client = Groq(api_key=api_key)
 
 def call_ollama(prompt: str) -> str:
     """
@@ -31,6 +31,7 @@ def call_ollama(prompt: str) -> str:
             if chunk.choices[0].delta.content:
                 text = chunk.choices[0].delta.content
                 print(text, end="", flush=True)
+                time.sleep(0.05)
                 full_response += text
         
         return full_response.strip()
