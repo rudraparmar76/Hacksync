@@ -1,32 +1,10 @@
-# Core backend framework
-fastapi==0.110.0
-uvicorn==0.29.0
-
-# Data validation & schemas
-# pydantic==2.6.4
-
-# File uploads
-python-multipart==0.0.9
-
-# Different file formats
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+python-dotenv
+groq
+pandas
 pypdf
 python-docx
-pandas
-
-# Async HTTP (for agent-to-agent calls & LLM APIs)
-httpx==0.27.0
-
-# Google Gemini SDK
-google-generativeai==0.4.1
-
-# groq
-groq
-
-# Environment variable management
-python-dotenv==1.0.1
-
-# Optional: logging & utilities
-rich==13.7.1
-
-# PDF Generation
 reportlab

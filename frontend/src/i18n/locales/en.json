@@ -1,0 +1,241 @@
+{
+  "nav": {
+    "home": "Home",
+    "chat": "Chat",
+    "logout": "Logout",
+    "login": "Login",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "badge": "✨ Introducing DeliberateAI",
+    "title": "Think Better,",
+    "highlight": "Decide Smarter",
+    "subtitle": "DeliberateAI brings multiple perspectives to your decision-making. Challenge your thinking, strengthen your arguments, and make confident choices with AI agents designed for collaborative deliberation.",
+    "ctaPrimary": "Get Started Free",
+    "ctaSecondary": "Watch Demo →"
+  },
+  "why": {
+    "title": "Why DeliberateAI?",
+    "subtitle": "Make better decisions by exploring every angle with our AI agents."
+  },
+  "features": {
+    "opposing": {
+      "title": "Opposing Agent",
+      "description": "Challenges your ideas with constructive opposition, encouraging deeper critical thinking."
+    },
+    "support": {
+      "title": "Support Agent",
+      "description": "Provides backing and reinforcement for your strongest arguments and initiatives."
+    },
+    "synthesizer": {
+      "title": "Synthesizer Agent",
+      "description": "Combines diverse perspectives into balanced, actionable conclusions."
+    },
+    "realtime": {
+      "title": "Real-time Collaboration",
+      "description": "Work with AI agents in real-time to refine your decisions instantly."
+    },
+    "analytics": {
+      "title": "Decision Analytics",
+      "description": "Track decision metrics and get insights into your deliberation patterns."
+    },
+    "actions": {
+      "title": "Action Plans",
+      "description": "Convert deliberations into concrete, step-by-step action plans."
+    }
+  },
+  "process": {
+    "title": "How It Works",
+    "subtitle": "A streamlined process to turn deliberation into action.",
+    "define": { "title": "Define", "description": "Articulate your problem or decision." },
+    "deliberate": { "title": "Deliberate", "description": "Engage with our AI agents." },
+    "synthesize": { "title": "Synthesize", "description": "Get balanced summaries." },
+    "act": { "title": "Act", "description": "Convert insights into plans." }
+  },
+  "agents": {
+    "support": "Support",
+    "synthesizer": "Synthesizer",
+    "challenger": "Challenger"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to your account",
+      "button": "Sign In"
+    },
+    "signup": {
+      "title": "Create Account",
+      "subtitle": "Join DeliberateAI today",
+      "button": "Create Account"
+    },
+    "labels": {
+      "email": "Email Address",
+      "password": "Password"
+    },
+    "placeholders": {
+      "email": "your@email.com",
+      "password": "Enter your password"
+    },
+    "forgot": "Forgot password?",
+    "google": "Continue with Google",
+    "loading": "Loading...",
+    "passwordRules": {
+      "length": "At least 8 characters",
+      "number": "Contains a number",
+      "uppercase": "Contains uppercase letter"
+    },
+    "switch": {
+      "loginText": "Already have an account?",
+      "signupText": "Don't have an account?",
+      "login": "Sign In",
+      "signup": "Sign Up"
+    },
+    "reset": {
+      "title": "Reset Password",
+      "subtitle": "Enter your email to receive a reset link",
+      "send": "Send Reset Link",
+      "back": "Back to Login",
+      "sent": "Password reset email sent!"
+    },
+    "errors": {
+      "required": "All fields are required",
+      "passwordLength": "Password must be at least 8 characters",
+      "emailExists": "Email already registered. Please login.",
+      "wrongPassword": "Incorrect password",
+      "googleFail": "Google sign-in failed"
+    },
+    "success": {
+      "login": "Signed in successfully!",
+      "signup": "Account created successfully!"
+    }
+  },
+  "settings": {
+    "back": "Back",
+    "title": "Settings",
+    "profile": {
+      "title": "Profile",
+      "signedIn": "Signed in with email & password"
+    },
+    "preferences": {
+      "title": "Preferences",
+      "theme": "Theme",
+      "dark": "Dark",
+      "notifications": "Notifications",
+      "enabled": "Enabled"
+    },
+    "account": {
+      "title": "Account",
+      "logout": "Logout"
+    }
+  },
+  "footer": {
+    "brand": {
+      "description": "Making thoughtful decisions through collaborative AI-powered deliberation. Better thinking leads to better outcomes."
+    },
+    "product": {
+      "title": "Product",
+      "features": "Features",
+      "pricing": "Pricing",
+      "documentation": "Documentation",
+      "api": "API"
+    },
+    "company": {
+      "title": "Company",
+      "about": "About",
+      "blog": "Blog",
+      "careers": "Careers",
+      "contact": "Contact"
+    },
+    "rights": "All rights reserved."
+  },
+  "sidebar": {
+    "newChat": "+ New Chat",
+    "exitChat": "← Exit Chat",
+    "settings": "Settings",
+    "deleteConfirm": "Delete this chat? This cannot be undone.",
+    "deleteFailed": "Failed to delete chat",
+    "untitledChat": "New Chat"
+  },
+  "chat": {
+    "welcome": "What's on your mind today?",
+    "inputPlaceholder": "Ask anything",
+    "aiDefaultResponse": "Hi how can I help you today?",
+    "uploadWait": "Please wait for file upload",
+    "attachFiles": "Attach files",
+    "voiceInput": "Voice input",
+    "stopRecording": "Stop recording",
+    "send": "Send",
+    "moreFiles": "+{{count}} more file",
+    "moreFilesPlural": "+{{count}} more files",
+    "speechNotSupported": "Speech recognition is not supported in your browser. Please use Chrome, Edge, or Safari."
+  },
+  "home": {
+    "hero": {
+      "badge": "✨ Introducing DeliberateAI",
+      "title_part1": "Decisions Through",
+      "title_gradient": "Structured Debate",
+      "subtitle": "DeliberateAI brings multiple perspectives to your decision-making. Challenge your thinking, strengthen your arguments, and make confident choices with AI agents designed for collaborative deliberation.",
+      "btn_primary": "Get Started Free",
+      "btn_secondary": "Watch Demo →"
+    },
+    "agents": {
+      "supportive": "Supportive",
+      "synthesizer": "Synthesizer",
+      "challenger": "Challenger"
+    },
+    "features_section": {
+      "title": "Why DeliberateAI?",
+      "subtitle": "Make better decisions by exploring every angle with our AI agents."
+    },
+    "features": {
+      "opposing": {
+        "title": "Opposing Agent",
+        "desc": "Challenges your ideas with constructive opposition, encouraging deeper critical thinking."
+      },
+      "support": {
+        "title": "Support Agent",
+        "desc": "Provides backing and reinforcement for your strongest arguments and initiatives."
+      },
+      "synthesizer": {
+        "title": "Synthesizer Agent",
+        "desc": "Combines diverse perspectives into balanced, actionable conclusions."
+      },
+      "collaboration": {
+        "title": "Real-time Collaboration",
+        "desc": "Work with AI agents in real-time to refine your decisions instantly."
+      },
+      "analytics": {
+        "title": "Decision Analytics",
+        "desc": "Track decision metrics and get insights into your deliberation patterns."
+      },
+      "action": {
+        "title": "Action Plans",
+        "desc": "Convert deliberations into concrete, step-by-step action plans."
+      }
+    },
+    "process_section": {
+      "title": "How It Works",
+      "subtitle": "A streamlined process to turn deliberation into action."
+    },
+    "process": {
+      "steps": {
+        "define": {
+          "title": "Define",
+          "desc": "Articulate your problem, question, or decision that needs deliberation."
+        },
+        "deliberate": {
+          "title": "Deliberate",
+          "desc": "Engage with our AI agents to explore multiple perspectives and challenges."
+        },
+        "synthesize": {
+          "title": "Synthesize",
+          "desc": "Get balanced summaries that combine all viewpoints into actionable insights."
+        },
+        "act": {
+          "title": "Act",
+          "desc": "Convert insights into concrete plans and track your progress over time."
+        }
+      }
+    }
+  }
+}
