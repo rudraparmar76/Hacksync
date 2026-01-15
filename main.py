@@ -61,16 +61,32 @@ from engines.debate_engine import run_debate
 
 input_data = {
     "factors": [
-        {
-            "id": "F1",
-            "name": "Breadth of Scientific and Societal Topics Covered",
-            "description": (
-                "The material encompasses subjects from core biological processes and "
-                "animal classification to environmental management, energy generation, "
-                "modern biotechnology, microbiology, and social health."
-            )
-        }
-    ]
+    {
+      "id": "F1",
+      "name": "Mindful AI Adoption",
+      "description": "Infosys emphasizes a strategic, mindful approach to AI adoption, encompassing robust data strategies, infrastructure optimization, and responsible use."
+    },
+    {
+      "id": "F2",
+      "name": "AI-Driven Efficiency",
+      "description": "The report showcases several case studies where AI has led to significant efficiency gains, such as Americana Restaurants' autonomous accounts payable and Posti's logistics transformation."
+    },
+    {
+      "id": "F3",
+      "name": "Responsible AI Implementation",
+      "description": "Infosys highlights the importance of responsible AI implementation, including human oversight and ethical considerations, as seen in the case study of Hatch's AI-powered virtual assistants."
+    },
+    {
+      "id": "F4",
+      "name": "Data-Driven Decision Making",
+      "description": "The report emphasizes the need for robust data strategies to support AI adoption, as seen in the case study of Citizens Financial Group's data lake and APIs."
+    },
+    {
+      "id": "F5",
+      "name": "AI-Powered Innovation",
+      "description": "The report showcases several case studies where AI has led to innovation, such as Sunrise's AI-driven customer engagement and operations, and Posti's AI-powered IT transformation."
+    }
+  ]
 }
 
 def main():
