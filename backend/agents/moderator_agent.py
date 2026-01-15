@@ -1,5 +1,5 @@
 from backend.prompts.moderator import moderator_prompt
-from llm.groq_client import call_groq
+from backend.llm.groq_client import call_groq
 import json
 import re
 
