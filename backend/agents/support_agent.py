@@ -1,76 +1,27 @@
-import os
-import json
-import re
-from typing import Dict
-
-from dotenv import load_dotenv
-import google.generativeai as genai
-
-load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-MODEL_NAME = "gemini-2.5-flash"
-
-SUPPORT_SCHEMA = {
-    "claim": "string",
-    "evidence": ["string"]
-}
+from llm.groq_client import call_groq
+from prompts.support_round1 import support_round1_prompt
+from prompts.support_round2 import support_round2_prompt
+from utils.clean_text import clean_output
+from utils.text_guard import enforce_sentence_limit
 
 
-def run_support_agent(factor: Dict, document: Dict) -> Dict:
-    """
-    Argues FOR a given factor using evidence from the document.
-    Returns STRICT JSON only.
-    """
+class SupportAgent:
+    def round1(self, factor):
+        """
+        Produce a single concise claim supporting the factor.
+        """
+        raw = call_groq(support_round1_prompt(factor))
+        return enforce_sentence_limit(clean_output(raw), 1)
 
-    model = genai.GenerativeModel(MODEL_NAME)
-
-    prompt = f"""
-You are a SUPPORTIVE reasoning agent in a multi-agent debate system.
-
-ROLE:
-Argue in FAVOR of the given factor.
-
-WHAT YOU SHOULD DO:
-- Assume the factor is valid
-- Make a clear, confident claim
-- Support it using evidence from the document
-- Use facts, metrics, or observations from the text
-
-WHAT YOU MUST NOT DO:
-- Do NOT criticize the factor
-- Do NOT hedge or weaken your claim
-- Do NOT invent information
-- Do NOT mention opposing viewpoints
-
-OUTPUT RULES (CRITICAL):
-- Output ONLY valid JSON
-- No markdown
-- No explanations
-- Follow the schema EXACTLY
-
-SCHEMA:
-{json.dumps(SUPPORT_SCHEMA, indent=2)}
-
-FACTOR:
-{json.dumps(factor, indent=2)}
-
-DOCUMENT SUMMARY:
-{json.dumps(document, indent=2)}
-"""
-
-    response = model.generate_content(prompt)
-    return _safe_json_parse(response.text)
-
-
-# ------------------ helpers ------------------
-
-def _safe_json_parse(text: str) -> Dict:
-    match = re.search(r"\{.*\}", text, re.DOTALL)
-    if not match:
-        return {"claim": "", "evidence": []}
-
-    try:
-        return json.loads(match.group())
-    except json.JSONDecodeError:
-        return {"claim": "", "evidence": []}
+    def round2(self, factor, claim_text, attack_text):
+        """
+        Defend the original claim against the opposition attack.
+        """
+        raw = call_groq(
+            support_round2_prompt(
+                factor=factor,
+                claim_text=claim_text,
+                attack_text=attack_text
+            )
+        )
+        return enforce_sentence_limit(clean_output(raw), 2)

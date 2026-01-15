@@ -1,15 +1,18 @@
 import os
 import json
 import re
-from typing import Dict, List
+from typing import Dict
 
 from dotenv import load_dotenv
 import google.generativeai as genai
 
+# ------------------ setup ------------------
+
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-MODEL_NAME = "models/gemini-2.5-flash"
+ 
+# ⚡ Use Flash for lowest latency
+MODEL_NAME = "gemini-2.5-flash"
 
 SUMMARY_SCHEMA = {
     "summary": "string",
@@ -21,13 +24,12 @@ SUMMARY_SCHEMA = {
     ]
 }
 
-
 # ------------------ PUBLIC API ------------------
 
-def summarize_document(normalized_input: Dict, max_chunk_size: int = 6000) -> Dict:
+def summarize_document(normalized_input: Dict) -> Dict:
     """
-    Summarizes multimodal input (text + structured insights)
-    into a strict JSON analytical summary.
+    FAST single-call summarization.
+    Exactly ONE Gemini request per file.
     """
 
     text = normalized_input.get("text", "").strip()
@@ -36,57 +38,31 @@ def summarize_document(normalized_input: Dict, max_chunk_size: int = 6000) -> Di
     if not text and not structured_insights:
         return {"summary": "", "sections": []}
 
-    chunks = _chunk_text(text, max_chunk_size)
+    # ---- light safety trim (prevents overload, keeps speed) ----
+    MAX_CHARS = 18000  # safe for Gemini Flash
+    if len(text) > MAX_CHARS:
+        text = text[:MAX_CHARS]
 
-    chunk_summaries = []
-    for idx, chunk in enumerate(chunks):
-        chunk_summaries.append(_summarize_chunk(chunk, idx + 1))
-
-    return _merge_summaries(chunk_summaries, structured_insights)
-
-
-# ------------------ HELPERS ------------------
-
-def _chunk_text(text: str, max_size: int) -> List[str]:
-    return [text[i:i + max_size] for i in range(0, len(text), max_size)]
-
-
-def _summarize_chunk(chunk: str, index: int) -> str:
     model = genai.GenerativeModel(MODEL_NAME)
 
     prompt = f"""
-You are a professional analyst.
+You are a document analysis engine.
 
-Summarize the following document chunk clearly and concisely.
-Preserve important facts, metrics, decisions, and issues.
-Do NOT add new information.
-Do NOT speculate.
-
-Chunk {index}:
-{chunk}
-"""
-
-    response = model.generate_content(prompt)
-    return response.text.strip()
-
-
-def _merge_summaries(chunk_summaries: List[str], structured_insights: List[str]) -> Dict:
-    model = genai.GenerativeModel(MODEL_NAME)
-
-    joined_text = "\n\n".join(chunk_summaries)
-
-    prompt = f"""
-You are a deterministic summarization engine in a multimodal analysis system.
-
-INPUTS:
-- Natural language summaries
-- Structured data insights (tables, metrics, charts)
+The input may be long.
 
 TASK:
-- Combine all inputs into a coherent analytical summary
-- Treat structured insights as factual signals
-- Do NOT invent data
-- Do NOT speculate beyond provided inputs
+1. Produce a concise overall summary (max 200 words)
+2. Identify major sections or themes and summarize each
+3. If the document is a worksheet or non-narrative, describe:
+   - topics covered
+   - structure
+   - content or question types
+
+RULES:
+- Use ONLY the provided input
+- Do NOT invent information
+- Do NOT speculate
+- Focus on themes, not line-by-line details
 
 CRITICAL OUTPUT RULES:
 - Output ONLY valid JSON
@@ -98,18 +74,24 @@ CRITICAL OUTPUT RULES:
 SCHEMA:
 {json.dumps(SUMMARY_SCHEMA, indent=2)}
 
-TEXT SUMMARIES:
-{joined_text}
+DOCUMENT TEXT:
+{text}
 
 STRUCTURED INSIGHTS:
 {json.dumps(structured_insights, indent=2)}
+
+Limit total output to 300 words.
 """
 
     response = model.generate_content(prompt)
     return _safe_json_parse(response.text)
 
+# ------------------ helpers ------------------
 
 def _safe_json_parse(text: str) -> Dict:
+    """
+    Safely extract and parse JSON from Gemini output.
+    """
     match = re.search(r"\{.*\}", text, re.DOTALL)
     if not match:
         return {"summary": "", "sections": []}
