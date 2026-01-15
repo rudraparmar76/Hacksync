@@ -1,7 +1,7 @@
-from agents.support_agent import SupportAgent
-from agents.oppose_agent import OppositionAgent
-from agents.moderator_agent import ModeratorAgent
-from core.schema import Factor
+from backend.agents.support_agent import SupportAgent
+from backend.agents.oppose_agent import OppositionAgent
+from backend.agents.moderator_agent import ModeratorAgent
+from backend.core.schema import Factor
 
 
 def run_debate(factor: Factor):

@@ -2,13 +2,13 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 import time
-from orchestrator.coordinator import run_aether_pipeline
-from preprocessing.normalizer import normalize_input
-from preprocessing.summarizer import summarize_document
-from agents.factor_agent import run_factor_agent
-from core.schema import Factor
-from engines.debate_engine import run_debate
-from agents.synth_agent import run_synth_agent
+from backend.orchestrator.coordinator import run_aether_pipeline
+from backend.preprocessing.normalizer import normalize_input
+from backend.preprocessing.summarizer import summarize_document
+from backend.agents.factor_agent import run_factor_agent
+from backend.core.schema import Factor
+from backend.engines.debate_engine import run_debate
+from backend.agents.synth_agent import run_synth_agent
 
 app = FastAPI(
     title="Project AETHER API",

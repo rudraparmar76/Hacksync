@@ -1,17 +1,17 @@
-from logs.traces import TraceLogger
-from logs.timeline import build_timeline
-from logs.highlights import extract_decision_path
-from logs.explanation import build_trace_explanation
+from backend.logs.traces import TraceLogger
+from backend.logs.timeline import build_timeline
+from backend.logs.highlights import extract_decision_path
+from backend.logs.explanation import build_trace_explanation
 
-from preprocessing.loader import extract_text
-from preprocessing.normalizer import normalize_input
-from preprocessing.summarizer import summarize_document
+from backend.preprocessing.loader import extract_text
+from backend.preprocessing.normalizer import normalize_input
+from backend.preprocessing.summarizer import summarize_document
 
-from agents.factor_agent import run_factor_agent
-from engines.debate_engine import run_debate
-from agents.synth_agent import run_synth_agent
+from backend.agents.factor_agent import run_factor_agent
+from backend.engines.debate_engine import run_debate
+from backend.agents.synth_agent import run_synth_agent
 
-from core.schema import Factor
+from backend.core.schema import Factor
 
 def run_aether_pipeline(
     file_bytes: bytes | None = None,

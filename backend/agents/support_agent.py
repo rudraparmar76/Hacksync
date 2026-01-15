@@ -1,8 +1,8 @@
-from llm.groq_client import call_groq
-from prompts.support_round1 import support_round1_prompt
-from prompts.support_round2 import support_round2_prompt
-from utils.clean_text import clean_output
-from utils.text_guard import enforce_sentence_limit
+from backend.llm.groq_client import call_groq
+from backend.prompts.support_round1 import support_round1_prompt
+from backend.prompts.support_round2 import support_round2_prompt
+from backend.utils.clean_text import clean_output
+from backend.utils.text_guard import enforce_sentence_limit
 
 
 class SupportAgent:
